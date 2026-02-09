@@ -1,16 +1,27 @@
 import connectDB from "./service/db.js";
 import express from "express";
-import routers from "./service/routers.js";
+import { User } from "./service/userModel.js";
 const app = express();
 app.use(express.json());
 // app.use(body.parser());
+async function createUserPractice() {
+  const user = await User.create({
+    name: "aman",
+    email: "altafziya@gmail.com",
+    age: 20,
+    role: "admin",
+  });
 
-app.use("/api/users", routers.createUser);
-// app.use("/api/all-users", allService);
-// app.use("/api/profile", allService);
-// app.use("/api/profile-update", allService);
-// app.use("/api/delete-user", allService);
+  return user;
+}
+
+createUserPractice()
+  .then((user) => {
+    console.log("User created:", user);
+  })
+  .catch((err) => {
+    console.error("Error:", err.message);
+  });
+
 connectDB();
-app.listen(3000, () => {
-  console.log("server running on port 3000");
-});
+app.listen(3000, () => {});
