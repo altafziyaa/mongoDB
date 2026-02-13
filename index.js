@@ -1,27 +1,30 @@
-import connectDB from "./service/db.js";
 import express from "express";
+import connectDB from "./service/db.js";
 import { User } from "./service/userModel.js";
+
 const app = express();
 app.use(express.json());
-// app.use(body.parser());
-async function createUserPractice() {
-  const user = await User.create({
-    name: "aman",
-    email: "altafziya@gmail.com",
-    age: 20,
-    role: "admin",
-  });
+app.use("/users", (isAdmin = (req, res) => {}));
 
-  return user;
-}
-
-createUserPractice()
-  .then((user) => {
-    console.log("User created:", user);
-  })
-  .catch((err) => {
-    console.error("Error:", err.message);
-  });
+app.post("/users", async (req, res) => {
+  try {
+    const user = await User.create({
+      name: "Aman",
+      email: "aman@gmail.com",
+      age: 22,
+      role: "admin",
+    });
+    res.status(201).json({
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+});
 
 connectDB();
-app.listen(3000, () => {});
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
